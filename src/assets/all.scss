@@ -1,0 +1,33 @@
+@import '~bootstrap/scss/functions';
+@import './helpers/variables';
+@import '~bootstrap/scss/bootstrap';
+
+//dashboard
+@import './dashboard';
+//customerpage
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans+TC:100,300,400,500,700,900&display=swap');
+@import './components/navbar';
+@import './components/header';
+@import './components/main';
+@import './components/footer';
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'Noto Sans TC', 微軟正黑體, sans-serif;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+a {
+  text-decoration: none;
+  :hover {
+    text-decoration: none;
+  }
+}
+main {
+  background-color: #f5f5f5;
+}

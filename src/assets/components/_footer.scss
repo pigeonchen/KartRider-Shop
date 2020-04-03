@@ -1,0 +1,41 @@
+.footer {
+  &-contact {
+    display: flex;
+    justify-content: center;
+    width: 75%;
+    margin: auto;
+    padding-top: 1rem;
+    a {
+      position: relative;
+      display: inline-block;
+      font-size: 2.8rem;
+      color: #4187eb;
+      margin: 0 1rem;
+      vertical-align: middle;
+      transition: all 0.2s ease-in;
+      img {
+        position: relative;
+        top: -6px;
+        width: 48px;
+        height: 48px;
+      }
+      &:hover {
+        transform: scale(1.3);
+      }
+    }
+  }
+
+  &-copyright {
+    text-align: center;
+    width: 75%;
+    margin: 1rem auto 0 auto;
+    a {
+      text-decoration: none;
+
+      img {
+        width: 3rem;
+        height: 3rem;
+      }
+    }
+  }
+}

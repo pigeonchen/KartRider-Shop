@@ -1,0 +1,20 @@
+.navbar {
+  &-header {
+    display: block;
+  }
+  &-brand-img {
+    max-height: 45px;
+    max-width: 150px;
+  }
+  &-icons {
+    position: absolute;
+    right: 0;
+  }
+  &-toggler {
+    padding: 11px 0;
+  }
+}
+
+#navbarSupportedContent {
+  letter-spacing: 3px;
+}

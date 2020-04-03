@@ -1,0 +1,264 @@
+<template>
+  <div>
+    <NavBar></NavBar>
+
+    <main>
+      <Alert></Alert>
+      <div class="container-fluid" style="min-height: 81vh">
+        <div class="row mb-3">
+          <div class="col-12">
+            <div class="background">
+              <div class="text mx-2">
+                <h1 class="text-white text-center p-3">輸入優惠碼打 9 折</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+        <breadcrumb></breadcrumb>
+        <div class="row">
+          <!-- 商品sidebar -->
+          <div class="col-lg-3 col-sm-12">
+            <div class="sticky-top pt-4">
+              <ul class="list-group product-sidebar mb-3 text-center">
+                <li
+                  class="list-group-item product-sidebar-items"
+                  :class="{'active': tempCategory === ''}"
+                  @click="tempCategory = ''"
+                >所有商品</li>
+                <li
+                  class="list-group-item product-sidebar-items"
+                  :class="{'active': tempCategory === '競速車'}"
+                  @click="tempCategory = '競速車'"
+                >競速車</li>
+                <li
+                  class="list-group-item product-sidebar-items"
+                  :class="{'active': tempCategory === '道具車'}"
+                  @click="tempCategory = '道具車'"
+                >道具車</li>
+                <li
+                  class="list-group-item product-sidebar-items"
+                  :class="{'active': tempCategory === '角色'}"
+                  @click="tempCategory = '角色'"
+                >角色</li>
+              </ul>
+            </div>
+          </div>
+          <!-- 商品頁面-->
+          <div class="col-lg-9 col-sm-12">
+            <loading :active.sync="isloading"></loading>
+            <div class="row">
+              <div class="col-lg-4 mb-4" v-for="item in filterProducts" :key="item.id">
+                <div class="card shadow-sm h-100">
+                  <img
+                    class="card-img-top p-2 bg-dark"
+                    :src="`${item.imageUrl}`"
+                    :alt="`${item.title}`"
+                  />
+
+                  <div class="card-body">
+                    <span class="badge badge-secondary float-right ml-2">{{item.category}}</span>
+                    <h5 class="card-title">{{item.title}}</h5>
+                    <div class="d-flex justify-content-between">
+                      <div class="d-flex flex-column">
+                        <p v-if="item.price === item.origin_price">售價{{item.origin_price}}元</p>
+                        <del
+                          class="mr-1"
+                          v-if="item.price !== item.origin_price"
+                        >原價{{item.origin_price}}元</del>
+                        <p
+                          class="m-0 text-danger"
+                          v-if="item.price !== item.origin_price"
+                        >售價{{item.price}} 元</p>
+                      </div>
+                      <div class="d-flex align-items-end">
+                        <button
+                          type="button"
+                          class="btn btn-sm btn-primary mr-2"
+                          @click="getProduct(item.id)"
+                        >
+                          <i class="fas fa-info-circle"></i>
+                        </button>
+                        <button
+                          type="button"
+                          class="btn btn-sm btn-warning"
+                          @click="addCart(item.id,1)"
+                        >
+                          <i class="fas fa-shopping-cart"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--pagination  -->
+            <Pagination :pagination="pagination" @getpage="getProducts" v-if="tempCategory===''"></Pagination>
+          </div>
+        </div>
+      </div>
+    </main>
+    <Footer></Footer>
+  </div>
+</template>
+<script>
+
+import NavBar from '@/components/customer/NavBar'
+import Footer from '@/components/customer/Footer'
+import Pagination from '@/components/common/Pagination'
+import Alert from '@/components/common/AlertMessage'
+import breadcrumb from '@/components/common/BreadCrumb'
+export default {
+  name: 'Shop',
+  components: {
+    NavBar,
+    Footer,
+    Pagination,
+    Alert,
+    breadcrumb
+  },
+  data () {
+    return {
+      products: [],
+      categoryProducts: [],
+      product: {
+        num: 1
+      },
+      cartContents: {},
+      tempCategory: '',
+      isloading: false,
+      pagination: []
+    }
+  },
+  methods: {
+    getProducts (page = 1) {
+      const vm = this
+      const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/products?page=${page}`
+      vm.isloading = true
+      this.$http.get(url).then((res) => {
+        vm.products = res.data.products
+
+        vm.isloading = false
+
+        vm.pagination = res.data.pagination
+      })
+    },
+    getAllProducts (page = 1) {
+      const vm = this
+
+      const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/products/all`
+      vm.isloading = true
+      this.$http.get(url).then((res) => {
+        vm.categotyProducts = res.data.products
+        vm.isloading = false
+      })
+    },
+    getProduct (id) {
+      const vm = this
+      const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/product/${id}`
+      this.$http.get(url).then((res) => {
+        vm.product = res.data.product
+        // 回傳內容沒有數量 num，所以要加入預設值
+        vm.$set(vm.product, 'num', 1)
+        vm.$router.push(`/product/${id}`)
+      })
+    },
+    // 新增至購物車
+    addCart (id, qty = 1) {
+      const vm = this
+      const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart/`
+      vm.isloading = true
+      const cart = {
+        product_id: id,
+        qty
+      }
+      this.$http.post(url, { data: cart }).then((res) => {
+        if (res.data.success) {
+          this.$bus.$emit('message:push', '已增加至購物車', 'success')
+          this.$bus.$emit('updateCart')
+        } else {
+          this.$bus.$emit('message:push', '增加至購物車失敗', 'danger')
+        }
+        vm.isloading = false
+      })
+    },
+    getCart () {
+      const vm = this
+      const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart/`
+      vm.isloading = true
+      this.$http.get(url).then((res) => {
+        vm.cartContents = res.data.data
+        vm.loadingItem = ''
+        vm.isloading = false
+      })
+    }
+  },
+  computed: {
+    filterProducts () {
+      const vm = this
+      if (vm.tempCategory === '') {
+        return vm.products
+      } else {
+        return vm.categotyProducts.filter(item => item.category === vm.tempCategory)
+      }
+    }
+  },
+  created () {
+    this.getAllProducts()
+    this.getProducts()
+    this.getCart()
+  }
+}
+
+</script>
+
+<style lang="scss" scoped>
+  .container-fluid {
+    margin-top: 20px;
+  }
+  .sticky-top {
+    z-index: 0;
+  }
+  .product-sidebar {
+    border: none;
+    &-items {
+      text-decoration: none;
+      border: 0.5px solid rgb(65, 135, 235);
+      border-radius: 10px;
+      margin-bottom: 10px;
+      transition: all 0.3s;
+      &:hover {
+        background-color: rgb(65, 135, 235);
+        color: #fff;
+        transform: scale(0.98);
+        &.active {
+          border: 2px rgb(65, 135, 235);
+          background-color: rgb(65, 135, 235);
+          color: #fff;
+        }
+      }
+    }
+  }
+
+  .background {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 200px;
+    background: url("~@/assets/img/product-img.png");
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    .text {
+      background-color: rgba(0, 0, 0, 0.3);
+      border-radius: 7px;
+    }
+  }
+
+  .card {
+    transition: all 0.3s;
+    &:hover {
+      transform: translate(3px, -3px);
+    }
+  }
+</style>
