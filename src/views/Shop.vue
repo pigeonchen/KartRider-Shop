@@ -14,7 +14,14 @@
             </div>
           </div>
         </div>
-        <breadcrumb></breadcrumb>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item" aria-current="page">
+              <router-link to="/">首頁</router-link>
+            </li>
+            <li class="breadcrumb-item" aria-current="page">商城</li>
+          </ol>
+        </nav>
         <div class="row">
           <!-- 商品sidebar -->
           <div class="col-lg-3 col-sm-12">
@@ -49,6 +56,14 @@
             <div class="row">
               <div class="col-lg-4 mb-4" v-for="item in filterProducts" :key="item.id">
                 <div class="card shadow-sm h-100">
+                  <a type="button" class="myfavorite">
+                    <i
+                      class="fas fa-heart"
+                      v-if="isfavored (item)"
+                      @click.stop="changeFavorite(item)"
+                    ></i>
+                    <i class="far fa-heart" v-else @click.stop="changeFavorite(item)"></i>
+                  </a>
                   <img
                     class="card-img-top p-2 bg-dark"
                     :src="`${item.imageUrl}`"
@@ -106,15 +121,15 @@ import NavBar from '@/components/customer/NavBar'
 import Footer from '@/components/customer/Footer'
 import Pagination from '@/components/common/Pagination'
 import Alert from '@/components/common/AlertMessage'
-import breadcrumb from '@/components/common/BreadCrumb'
+
 export default {
   name: 'Shop',
   components: {
     NavBar,
     Footer,
     Pagination,
-    Alert,
-    breadcrumb
+    Alert
+
   },
   data () {
     return {
@@ -126,7 +141,9 @@ export default {
       cartContents: {},
       tempCategory: '',
       isloading: false,
-      pagination: []
+      pagination: [],
+      favorites: []
+
     }
   },
   methods: {
@@ -142,9 +159,8 @@ export default {
         vm.pagination = res.data.pagination
       })
     },
-    getAllProducts (page = 1) {
+    getAllProducts () {
       const vm = this
-
       const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/products/all`
       vm.isloading = true
       this.$http.get(url).then((res) => {
@@ -190,6 +206,34 @@ export default {
         vm.loadingItem = ''
         vm.isloading = false
       })
+    },
+    getFavorites () {
+      this.favorites = JSON.parse(localStorage.getItem('favorites')) || []
+    },
+    changeFavorite (product) {
+      const vm = this
+      // 儲存有在this.favorites中資料的index
+      if (vm.favorites.length === 0 || vm.favorites.some(item => item.id !== product.id)) {
+        vm.favorites.push(product)
+      } else {
+        // 存在則移除
+        const index = vm.favorites.findIndex(item => item.id === product.id)
+        console.log(index)
+        vm.favorites.splice(index, 1)
+      }
+      // 儲存至 localStorage
+      localStorage.setItem('favorites', JSON.stringify(vm.favorites))
+      // 重新整理
+      vm.getFavorites()
+      vm.$bus.$emit('favor:get')
+    },
+    // 判斷顯示/隱藏關注樣式
+    isfavored (item) {
+      const isfavored = this.favorites.filter(favor => favor.id === item.id)
+      if (isfavored.length > 0) {
+        return true
+      }
+      return false
     }
   },
   computed: {
@@ -203,9 +247,12 @@ export default {
     }
   },
   created () {
+    const vm = this
     this.getAllProducts()
     this.getProducts()
     this.getCart()
+    this.getFavorites()
+    vm.$bus.$on('productFavor:get', () => vm.getFavorites())
   }
 }
 
@@ -260,5 +307,14 @@ export default {
     &:hover {
       transform: translate(3px, -3px);
     }
+  }
+  .myfavorite {
+    position: absolute;
+    top: 8px;
+    left: 10px;
+  }
+  .myfavorite i {
+    font-size: 26px;
+    color: #ff693b;
   }
 </style>

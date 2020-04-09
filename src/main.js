@@ -8,7 +8,9 @@ import VeeValidate, { Validator } from 'vee-validate'
 import zhTWValidate from 'vee-validate/dist/locale/zh_TW'
 import VueAxios from 'vue-axios'
 import VueClipboard from 'vue-clipboard2'
-
+import VueAwesomeSwiper from 'vue-awesome-swiper'
+// import style
+import 'swiper/css/swiper.css'
 // 自訂
 import App from './App.vue'
 import router from './router'
@@ -17,6 +19,7 @@ import currencyFilter from './components/filters/Currency'
 
 Vue.use(VueAxios, axios)
 Vue.use(VeeValidate)
+Vue.use(VueAwesomeSwiper)
 // clipboard
 Vue.use(VueClipboard)
 VueClipboard.config.autoSetContainer = true
@@ -34,11 +37,9 @@ new Vue({
   render: h => h(App)
 }).$mount('#app')
 router.beforeEach((to, from, next) => {
-  console.log('to', to, 'from', from, 'next', next)
   if (to.meta.requiresAuth) {
     const api = `${process.env.VUE_APP_APIPATH}/api/user/check`
     axios.post(api).then(res => {
-      console.log(res.data)
       if (res.data.success) {
         next()
       } else {

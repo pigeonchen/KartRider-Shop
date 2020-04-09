@@ -3,7 +3,17 @@
     <NavBar></NavBar>
     <Alert></Alert>
     <main>
-      <breadcrumb></breadcrumb>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item" aria-current="page">
+            <router-link to="/">首頁</router-link>
+          </li>
+          <li class="breadcrumb-item" aria-current="page">
+            <router-link to="/shop">商城</router-link>
+          </li>
+          <li class="breadcrumb-item" aria-current="page">{{product.title}}</li>
+        </ol>
+      </nav>
       <div class="container py-5">
         <div class="row d-flex">
           <div class="col-lg-6 col-sm-12 d-flex justify-content-center align-items-center bg-dark">
@@ -33,7 +43,7 @@
 
             <div class="info-details mb-3">
               <h5>商品描述</h5>
-              <div class="mb-1" v-html="description"></div>
+              <div class="mb-4" v-html="description"></div>
               <h5>商品特色</h5>
               <div v-html="content"></div>
             </div>
@@ -57,6 +67,10 @@
           </div>
         </div>
       </div>
+      <div class="container py-5">
+        <h3>推薦內容</h3>
+        <ProductsSwiper :productsList="filterProducts" @directProduct="directProduct"></ProductsSwiper>
+      </div>
     </main>
     <Footer></Footer>
   </div>
@@ -66,17 +80,18 @@ import $ from 'jquery'
 import NavBar from '@/components/customer/NavBar'
 import Footer from '@/components/customer/Footer'
 import Alert from '@/components/common/AlertMessage'
-import breadcrumb from '@/components/common/BreadCrumb'
+import ProductsSwiper from '@/components/customer/ProductsSwiper'
 export default {
   name: 'Shop',
   components: {
     NavBar,
     Footer,
     Alert,
-    breadcrumb
+    ProductsSwiper
   },
   data () {
     return {
+      products: [],
       productId: '',
       product: {
       },
@@ -88,18 +103,35 @@ export default {
     }
   },
   methods: {
+    getAllProducts () {
+      const vm = this
+      const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/products/all`
+      vm.isloading = true
+      this.$http.get(url).then((res) => {
+        vm.products = res.data.products
+        vm.isloading = false
+      })
+    },
     getProduct (id) {
       const vm = this
-      const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/product/${vm.productId}`
+      const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/product/${this.$route.params.id}`
       vm.loadingItem = id
+      vm.isloading = true
       this.$http.get(url).then((res) => {
         vm.product = res.data.product
         // 回傳內容沒有數量 num，所以要加入預設值
         vm.$set(vm.product, 'num', 1)
         vm.turnDetails()
-        console.log(res)
         vm.loadingItem = ''
+        vm.isloading = false
       })
+    },
+    directProduct (id) {
+      // 因為同一個路徑會出錯
+      const path = `/product/${id}`
+      console.log(this.$route.path)
+      this.$router.push(path).catch(err => err)
+      this.getProduct(id)
     },
     // 新增至購物車
     addCart (id, qty = 1) {
@@ -154,17 +186,13 @@ export default {
   computed: {
     filterProducts () {
       const vm = this
-      if (vm.tempCategory === '') {
-        return vm.products
-      } else {
-        return vm.categotyProducts.filter(item => item.category === vm.tempCategory)
-      }
+      return vm.products.filter((item) => item.category === vm.product.category && item.id !== vm.product.id)
     }
   },
   created () {
-    this.productId = this.$route.params.id
     this.getCart()
     this.getProduct()
+    this.getAllProducts()
   }
 }
 

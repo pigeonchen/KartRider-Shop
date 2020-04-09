@@ -63,11 +63,8 @@ export default {
     })
     // 送出消息
     // vm.$bus.$emit('message:push')
-  },
-  beforeDestroy () {
-    // 必須手動銷毀事件，eventBus 不會自動清除
-    this.$bus.$off('message:push')
   }
+
 }
 </script>
 

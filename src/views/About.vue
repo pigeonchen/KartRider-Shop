@@ -2,6 +2,14 @@
   <div>
     <NavBar></NavBar>
     <main>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item" aria-current="page">
+            <router-link to="/">首頁</router-link>
+          </li>
+          <li class="breadcrumb-item">關於</li>
+        </ol>
+      </nav>
       <div class="container p-5">
         <div class="about-info row no-gutters p-3">
           <img src="../assets/img/about-race.png" class="col-lg-6 col-md-12" />
@@ -42,11 +50,13 @@
 <script>
 import NavBar from '@/components/customer/NavBar'
 import Footer from '@/components/customer/Footer'
+
 export default {
   name: 'About',
   components: {
     NavBar,
     Footer
+
   }
 }
 </script>

@@ -30,7 +30,7 @@
               <p class="mt-3">即日起只要輸入指定優惠碼</p>
               <p>
                 即享有
-                <span class="h2 text-danger">8</span> 折優惠
+                <span class="h2 text-danger">9</span> 折優惠
               </p>
               <div style="max-width: 250px" class="input-group mx-auto mb-3">
                 <span class="form-control">{{message}}</span>

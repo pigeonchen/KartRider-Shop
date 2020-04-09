@@ -26,6 +26,51 @@
                 <i class="fas fa-user"></i>
               </router-link>
             </li>
+            <li class="nav-item nav-link mr-3">
+              <i
+                class="fas fa-heart"
+                id="dropdownFavorButton"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              ></i>
+
+              <!-- favorites-badge -->
+              <span class="badge badge-pill badge-danger" v-if="favorites">{{favorites.length}}</span>
+              <!-- favorites-dropdown -->
+              <div
+                class="dropdown-menu dropdown-menu-right mr-1"
+                aria-labelledby="dropdownFavorButton"
+                style="width: 300px "
+                v-if="favorites.length > 0"
+              >
+                <h5 class="text-center">我的最愛</h5>
+                <table class="table">
+                  <tbody>
+                    <tr v-for="(item) in favorites" :key="item.id">
+                      <td
+                        class="text-sbbrown w-75"
+                        @click="$router.push(`/product/${item.id}`)"
+                      >{{ item.title }}</td>
+                      <td>
+                        <button type="button" class="btn btn-warning" @click="addCart(item.id)">
+                          <i class="fas fa-shopping-cart"></i>
+                        </button>
+                      </td>
+                      <td>
+                        <button
+                          type="button"
+                          class="btn btn-danger"
+                          @click="removeFavorItem (item.id)"
+                        >
+                          <i class="far fa-trash-alt"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </li>
             <!-- 購物車 -->
             <li class="nav-item nav-link mr-3">
               <i
@@ -107,7 +152,8 @@ export default {
   name: 'Navbar',
   data () {
     return {
-      cartContents: []
+      cartContents: [],
+      favorites: []
     }
   },
   methods: {
@@ -121,6 +167,24 @@ export default {
         vm.isloading = false
       })
     },
+    addCart (id, qty = 1) {
+      const vm = this
+      const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart/`
+      vm.isloading = true
+      const cart = {
+        product_id: id,
+        qty
+      }
+      this.$http.post(url, { data: cart }).then((res) => {
+        if (res.data.success) {
+          this.$bus.$emit('message:push', '已增加至購物車', 'success')
+          this.$bus.$emit('updateCart')
+        } else {
+          this.$bus.$emit('message:push', '增加至購物車失敗', 'danger')
+        }
+        vm.isloading = false
+      })
+    },
     removeCartItem (id) {
       const vm = this
       const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart/${id}`
@@ -129,14 +193,29 @@ export default {
         vm.getCart()
         vm.isloading = false
       })
+    },
+    getFavorites () {
+      this.favorites = JSON.parse(localStorage.getItem('favorites')) || []
+    },
+    // 移除喜歡的商品
+    removeFavorItem (product) {
+      const index = this.favorites.indexOf(product)
+      this.favorites.splice(index, 1)
+      // 儲存至 localStorage
+      localStorage.setItem('favorites', JSON.stringify(this.favorites))
+      // 重新整理
+      this.$bus.$emit('productFavor:get')
+      this.getFavorites()
     }
   },
   created () {
-    const vm = this
-    vm.getCart()
+    this.getCart()
+    this.getFavorites()
   },
   mounted () {
-    this.$bus.$on('updateCart', this.getCart)
+    const vm = this
+    vm.$bus.$on('updateCart', vm.getCart)
+    vm.$bus.$on('favor:get', () => vm.getFavorites())
   },
   beforeDestroy () {
     this.$bus.$off('updateCart')
@@ -158,16 +237,14 @@ export default {
     z-index: 2;
     box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.3);
   }
-  #dropdownMenuButton {
+  .nav-item {
     position: relative;
   }
   .badge {
-    position: relative;
-    top: -50%;
-    right: 12%;
-    width: 20px;
-    height: 20px;
+    position: absolute;
+    top: 5px;
+    right: -6px;
     text-align: center;
-    font-size: 12px;
+    font-size: 0.5rem;
   }
 </style>
