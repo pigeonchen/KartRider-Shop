@@ -48,9 +48,9 @@ export default {
   methods: {
     signin () {
       const api = `${process.env.VUE_APP_APIPATH}/admin/signin`
-      console.log(api)
+     
       this.$http.post(api, this.user).then(res => {
-        console.log(res.data)
+        
         if (res.data.success) {
           this.$router.push('/admin/products')
         }

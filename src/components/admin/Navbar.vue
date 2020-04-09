@@ -20,7 +20,6 @@ export default {
       const vm = this
       const url = `${process.env.VUE_APP_APIPATH}/logout`
       this.$http.post(url).then((res) => {
-        console.log(res.data)
         if (res.data.success) {
           vm.$router.push('/')
         }

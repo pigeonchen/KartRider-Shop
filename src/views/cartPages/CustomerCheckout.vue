@@ -110,7 +110,6 @@ export default {
   created () {
     // TODO: 取得網址參數
     this.orderId = this.$route.params.orderId
-    console.log(this.orderId)
     this.getOrder()
   }
 }

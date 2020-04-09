@@ -129,7 +129,6 @@ export default {
     directProduct (id) {
       // 因為同一個路徑會出錯
       const path = `/product/${id}`
-      console.log(this.$route.path)
       this.$router.push(path).catch(err => err)
       this.getProduct(id)
     },

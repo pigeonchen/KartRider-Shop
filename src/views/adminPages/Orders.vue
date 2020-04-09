@@ -176,7 +176,7 @@ export default {
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/orders?page=${page}`
       vm.isLoading = true
       this.$http.get(api).then(res => {
-        console.log(res.data)
+        
         vm.orders = res.data.orders
         vm.isLoading = false
         vm.pagination = res.data.pagination
@@ -190,7 +190,7 @@ export default {
       const vm = this
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/order/${orderId}`
       this.$http.put(api, { data: vm.tempOrder }).then(res => {
-        console.log(res.data)
+      
         if (res.data.success) {
           $('#orderModal').modal('hide')
           vm.getOrders()

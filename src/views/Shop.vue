@@ -218,7 +218,7 @@ export default {
       } else {
         // 存在則移除
         const index = vm.favorites.findIndex(item => item.id === product.id)
-        console.log(index)
+        
         vm.favorites.splice(index, 1)
       }
       // 儲存至 localStorage

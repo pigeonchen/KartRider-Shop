@@ -177,13 +177,13 @@ export default {
   },
   methods: {
     getCoupons (page = 1) {
-      console.log(process.env.VUE_APP_APIPATH, process.env.VUE_APP_CUSTOMPATH)
+     
       const vm = this
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/coupons?page=${page}`
       vm.isLoading = true
       this.$http.get(api).then(res => {
         vm.coupons = res.data.coupons
-        console.log(res.data)
+       
         vm.isLoading = false
         vm.pagination = res.data.pagination
       })
@@ -219,7 +219,7 @@ export default {
         httpMethod = 'delete'
       }
       this.$http[httpMethod](api, { data: vm.tempCoupon }).then(res => {
-        console.log(res.data)
+        
         const modal = vm.openModalMethod === 'delete' ? '#delCouponModal' : '#couponModal'
         if (res.data.success) {
           $(modal).modal('hide')
