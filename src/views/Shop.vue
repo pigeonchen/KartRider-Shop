@@ -60,9 +60,9 @@
                     <i
                       class="fas fa-heart"
                       v-if="isfavored (item)"
-                      @click.stop="changeFavorite(item)"
+                      @click.prevent="changeFavorite(item)"
                     ></i>
-                    <i class="far fa-heart" v-else @click.stop="changeFavorite(item)"></i>
+                    <i class="far fa-heart" v-else @click.prevent="changeFavorite(item)"></i>
                   </a>
                   <img
                     class="card-img-top p-2 bg-dark"
@@ -153,9 +153,7 @@ export default {
       vm.isloading = true
       this.$http.get(url).then((res) => {
         vm.products = res.data.products
-
         vm.isloading = false
-
         vm.pagination = res.data.pagination
       })
     },
@@ -212,13 +210,13 @@ export default {
     },
     changeFavorite (product) {
       const vm = this
+
       // 儲存有在this.favorites中資料的index
       if (vm.favorites.length === 0 || vm.favorites.some(item => item.id !== product.id)) {
         vm.favorites.push(product)
       } else {
         // 存在則移除
         const index = vm.favorites.findIndex(item => item.id === product.id)
-        
         vm.favorites.splice(index, 1)
       }
       // 儲存至 localStorage

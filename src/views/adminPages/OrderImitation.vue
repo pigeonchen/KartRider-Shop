@@ -257,7 +257,6 @@ export default {
       vm.isloading = true
       this.$http.get(url).then((res) => {
         vm.products = res.data.products
-        
         vm.isloading = false
       })
     },
@@ -270,7 +269,6 @@ export default {
         // 回傳內容沒有數量 num，所以要加入預設值
         vm.$set(vm.product, 'num', 1)
         $('#productModal').modal('show')
-        
         vm.loadingItem = ''
       })
     },
@@ -318,7 +316,6 @@ export default {
       }
       vm.isloading = true
       this.$http.post(url, { data: coupon }).then((res) => {
-       
         vm.getCart()
         vm.isloading = false
       })
@@ -330,7 +327,6 @@ export default {
       this.$validator.validate().then(valid => {
         if (valid) {
           this.$http.post(url, { data: order }).then((res) => {
-           
             if (res.data.success) {
               vm.$router.push(`./customer_checkout/${res.data.orderId}`)
             }

@@ -200,7 +200,6 @@ export default {
       }
       vm.isloading = true
       this.$http.post(url, { data: coupon }).then((res) => {
-       
         vm.getCart()
         vm.isloading = false
       })
@@ -212,14 +211,13 @@ export default {
       this.$validator.validate().then(valid => {
         if (valid) {
           this.$http.post(url, { data: order }).then((res) => {
-            
             if (res.data.success) {
               vm.$router.push(`./customer_checkout/${res.data.orderId}`)
               this.$bus.$emit('message:push', res.data.message, 'success')
             }
             vm.isloading = false
           })
-        } 
+        }
       })
     }
   },

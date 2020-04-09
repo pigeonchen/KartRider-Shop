@@ -26,7 +26,7 @@ export default {
     return {
       swiperOptions: {
         autoplay: 3000,
-        slidesPerView: 4,
+        slidesPerView: 3,
         navigation: {
           nextEl: '.swiper-button-next',
           prevEl: '.swiper-button-prev'
@@ -49,16 +49,25 @@ export default {
 </script>
 <style lang="scss" scoped>
   .swiper {
+    &-picture {
+      width: 90%;
+      height: 100%;
+      margin-right: 5%;
+      position: relative;
+      background-color: #343a40;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
     &-img {
-      margin: 0 10px;
-      height: 200px;
+      width: 100%;
+      height: 100%;
       position: relative;
       background-color: #343a40;
     }
     &-info {
       width: 100%;
       height: 0;
-      margin: 0 10px;
       background: rgba(245, 245, 245, 0.3);
       position: absolute;
       top: 0;
@@ -67,13 +76,18 @@ export default {
       &--btn {
         position: absolute;
         opacity: 0;
-        top: 40%;
-        left: 30%;
+        width: 80%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
       }
+    }
+    &-button-next {
+      right: 0;
     }
     &-picture:hover {
       .swiper-info {
-        height: 200px;
+        height: 100%;
       }
       .swiper-info--btn {
         opacity: 1;

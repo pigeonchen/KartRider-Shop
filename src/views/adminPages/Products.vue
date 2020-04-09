@@ -250,12 +250,10 @@ export default {
   },
   methods: {
     getProducts (page = 1) {
-      
       const vm = this
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/products?page=${page}`
       vm.isLoading = true
       this.$http.get(api).then(res => {
-        
         vm.products = res.data.products
         vm.isLoading = false
         vm.pagination = res.data.pagination
@@ -292,7 +290,6 @@ export default {
         httpMethod = 'delete'
       }
       this.$http[httpMethod](api, { data: vm.tempProduct }).then(res => {
-       
         const modal = vm.openModalMethod === 'delete' ? '#delProductModal' : '#productsModal'
         if (res.data.success) {
           $(modal).modal('hide')
@@ -306,7 +303,6 @@ export default {
       })
     },
     updateFile () {
-      
       const uploadedFile = this.$refs.files.files[0]
       const vm = this
       const formData = new FormData()
@@ -318,7 +314,6 @@ export default {
           'Content-Type': 'multipart/form-data'
         }
       }).then(res => {
-        
         vm.fileUploading = false
         if (res.data.success) {
           vm.$set(vm.tempProduct, 'imageUrl', res.data.imageUrl)
