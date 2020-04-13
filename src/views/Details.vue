@@ -68,7 +68,7 @@
         </div>
       </div>
       <div class="container py-5">
-        <h3>推薦內容</h3>
+        <h3 class="text-center">推薦商品</h3>
         <ProductsSwiper :productsList="filterProducts" @directProduct="directProduct"></ProductsSwiper>
       </div>
     </main>

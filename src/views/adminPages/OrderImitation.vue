@@ -1,6 +1,10 @@
 <template>
   <div>
-    <loading :active.sync="isloading"></loading>
+    <loading :active.sync="isloading">
+      <template name="default">
+        <div class="bazzi-loading"></div>
+      </template>
+    </loading>
     <!-- //TODO: 商品頁面 -->
     <div class="row mt-4">
       <div class="col-md-3 mb-4" v-for="item in products" :key="item.id">

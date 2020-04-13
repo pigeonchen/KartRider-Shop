@@ -12,9 +12,9 @@
           </div>
         </div>
       </swiper-slide>
-      <div class="swiper-button-prev" slot="button-prev"></div>
-      <div class="swiper-button-next" slot="button-next"></div>
     </swiper>
+    <div class="swiper-button-prev" slot="button-prev"></div>
+    <div class="swiper-button-next" slot="button-next"></div>
   </div>
 </template>
 
@@ -26,10 +26,11 @@ export default {
     return {
       swiperOptions: {
         autoplay: 3000,
-        slidesPerView: 3,
+        slidesPerView: 4,
         navigation: {
           nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev'
+          prevEl: '.swiper-button-prev',
+          disabledClass: 'my-button-disabled'
         }
       },
       products: []
@@ -52,9 +53,9 @@ export default {
     &-picture {
       width: 90%;
       height: 100%;
-      margin-right: 5%;
       position: relative;
       background-color: #343a40;
+
       &:last-child {
         margin-right: 0;
       }
@@ -68,7 +69,7 @@ export default {
     &-info {
       width: 100%;
       height: 0;
-      background: rgba(245, 245, 245, 0.3);
+      background: rgba(245, 245, 245, 0.45);
       position: absolute;
       top: 0;
       left: 0;
@@ -93,5 +94,8 @@ export default {
         opacity: 1;
       }
     }
+  }
+  .my-button-disabled {
+    opacity: 0;
   }
 </style>

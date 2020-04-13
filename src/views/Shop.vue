@@ -1,7 +1,6 @@
 <template>
   <div>
     <NavBar></NavBar>
-
     <main>
       <Alert></Alert>
       <div class="container-fluid" style="min-height: 81vh">
@@ -52,7 +51,11 @@
           </div>
           <!-- 商品頁面-->
           <div class="col-lg-9 col-sm-12">
-            <loading :active.sync="isloading"></loading>
+            <loading :active.sync="isloading">
+              <template name="default">
+                <div class="bazzi-loading"></div>
+              </template>
+            </loading>
             <div class="row">
               <div class="col-lg-4 mb-4" v-for="item in filterProducts" :key="item.id">
                 <div class="card shadow-sm h-100">

@@ -1,5 +1,10 @@
 <template>
   <div>
+    <loading :active.sync="isloading">
+      <template name="default">
+        <div class="bazzi-loading"></div>
+      </template>
+    </loading>
     <Alert></Alert>
     <div class="container py-3">
       <div class="row">

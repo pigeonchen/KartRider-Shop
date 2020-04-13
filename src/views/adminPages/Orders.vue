@@ -1,7 +1,11 @@
 
 <template>
   <div class="text-center">
-    <loading color="#4a89dc" :active.sync="isLoading"></loading>
+    <loading :active.sync="isloading">
+      <template name="default">
+        <div class="bazzi-loading"></div>
+      </template>
+    </loading>
     <table class="table mt-4">
       <thead>
         <tr>

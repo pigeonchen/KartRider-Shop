@@ -31,3 +31,16 @@ a {
 main {
   background-color: #f5f5f5;
 }
+// loading
+.vld-overlay .vld-background {
+  background-color: black;
+}
+.bazzi-loading {
+  //assets在專案編譯的過程中會被webpack處理解析為模組依賴
+  //路徑使用'~@' 會被Webpack解析為 require(/src/...)
+  background-image: url('~@/assets/img/Loading.gif');
+  background-repeat: no-repeat;
+  background-attachment: 100%;
+  width: 200px;
+  height: 200px;
+}

@@ -1,6 +1,10 @@
  <template>
   <div class="text-center">
-    <loading color="#4a89dc" :active.sync="isLoading"></loading>
+    <loading :active.sync="isloading">
+      <template name="default">
+        <div class="bazzi-loading"></div>
+      </template>
+    </loading>
     <div class="text-right mt-4">
       <button class="btn btn-primary" @click=" openModal('set')">建立優惠券</button>
     </div>
