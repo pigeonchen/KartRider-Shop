@@ -1,36 +1,33 @@
 .m-title {
   font-size: 1.75rem;
-  padding: 1rem 0;
+  padding: 2rem 0;
   text-align: center;
 }
 .products {
-  .row:nth-child(even) {
-    background-color: rgb(226, 228, 231);
+  background-image: url('https://images.unsplash.com/photo-1578627605964-8dda0e6508c9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  color: #ffffff;
+  .row {
     padding: 20px 0;
+    letter-spacing: 5px;
   }
+
   &-img {
+    display: none;
     width: 400px;
     height: 300px;
-  }
-  &-content {
-    h1 {
-      position: relative;
-      &::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        z-index: 2;
-        left: -15px;
-        width: 3px;
-        transform: translateX(-50%);
-        height: 60px;
-        background-color: $warning;
-      }
+    .active {
+      transition: all 0.3s;
+      display: block;
     }
   }
 }
-.contact {
+.recommend-products {
   background-color: rgb(226, 228, 231);
+}
+.contact {
   height: 300px;
   width: 100%;
   .input-group {

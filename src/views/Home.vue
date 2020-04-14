@@ -54,53 +54,82 @@
 
     <main class="container-fluid p-0">
       <!-- 商品種類 -->
-      <section class="products ">
+      <section class="products pb-5">
         <h1 class="m-title">商品種類</h1>
-        <div class="row no-gutters">
-          <div class="col-lg-6 col-sm-12 d-flex justify-content-center">
-            <img src="@/assets/img/Ranger.png" alt="ranger" class="products-img" />
-          </div>
-          <div class="col-lg-6 col-sm-12">
-            <div class="products-content text-center">
-              <h1>競速車</h1>
-              <p>擁有強大推進器</p>
-              <p>強勁的尾加速器</p>
-              <p>兇猛的起步推進器</p>
-              <router-link class="btn btn-lg btn-primary" to="shop" role="button">去看看</router-link>
+        <div class="container p-0">
+          <div class="row no-gutters">
+            <div class="col-lg-6 col-sm-12 d-flex justify-content-center">
+              <img
+                src="@/assets/img/Ranger.png"
+                alt="ranger"
+                class="products-img"
+                ref="imagePosition"
+              />
+            </div>
+            <div class="col-lg-6 col-sm-12">
+              <div class="products-content text-center">
+                <h1 class="mb-3">競速車</h1>
+                <p>擁有強大推進器</p>
+                <p>強勁的尾加速器</p>
+                <p>兇猛的起步推進器</p>
+                <a
+                  class="btn btn-lg btn-primary text-white mt-4"
+                  @click.prevent="toShop('競速車')"
+                  role="button"
+                >去看看</a>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="row no-gutters d-flex flex-sm-row flex-lg-row-reverse">
-          <div class="col-lg-6 col-sm-12 d-flex justify-content-center">
-            <img src="@/assets/img/Broom.png" alt="ranger" class="products-img" />
-          </div>
-          <div class="col-lg-6 col-sm-12">
-            <div class="products-content text-center">
-              <h1>道具車</h1>
-              <p>各種稀奇古怪的外型</p>
-              <p>豐富多樣的道具</p>
-              <p>專屬於道具賽的推進器</p>
-              <router-link class="btn btn-lg btn-primary" to="shop" role="button">去看看</router-link>
+          <div class="row no-gutters d-flex flex-sm-row flex-lg-row-reverse">
+            <div class="col-lg-6 col-sm-12 d-flex justify-content-center">
+              <img
+                src="@/assets/img/Broom.png"
+                alt="ranger"
+                class="products-img"
+                ref="imagePosition"
+              />
+            </div>
+            <div class="col-lg-6 col-sm-12">
+              <div class="products-content text-center">
+                <h1 class="mb-3">道具車</h1>
+                <p>各種稀奇古怪的外型</p>
+                <p>豐富多樣的道具</p>
+                <p>專屬於道具賽的推進器</p>
+                <a
+                  class="btn btn-lg btn-primary text-white mt-4"
+                  @click.prevent="toShop('道具車')"
+                  role="button"
+                >去看看</a>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="row no-gutters">
-          <div class="col-lg-6 col-sm-12 d-flex justify-content-center">
-            <img src="@/assets/img/Bazzi.png" alt="ranger" class="products-img" />
-          </div>
-          <div class="col-lg-6 col-sm-12">
-            <div class="products-content text-center">
-              <h1>角色</h1>
-              <p>爆爆王的原生角色</p>
-              <p>個性鮮明的主題角色</p>
-              <p>比賽專屬獎勵加成</p>
-              <router-link class="btn btn-lg btn-primary" to="shop" role="button">去看看</router-link>
+          <div class="row no-gutters">
+            <div class="col-lg-6 col-sm-12 d-flex justify-content-center">
+              <img
+                src="@/assets/img/Bazzi.png"
+                alt="ranger"
+                class="products-img"
+                ref="imagePosition"
+              />
+            </div>
+            <div class="col-lg-6 col-sm-12">
+              <div class="products-content text-center">
+                <h1 class="mb-3">角色</h1>
+                <p>爆爆王的原生角色</p>
+                <p>個性鮮明的主題角色</p>
+                <p>比賽專屬獎勵加成</p>
+                <a
+                  class="btn btn-lg btn-primary text-white mt-4"
+                  @click.prevent="toShop('角色')"
+                  role="button"
+                >去看看</a>
+              </div>
             </div>
           </div>
         </div>
       </section>
       <!-- 推薦商品 -->
-      <section class="popular-products mb-5">
+      <section class="recommend-products pb-5">
         <h1 class="m-title">推薦商品</h1>
         <div class="container">
           <div class="row no-gutters justify-content-center">
@@ -192,11 +221,9 @@
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <div class="modal-body">
-                <h3>
-                  感謝您的訂閱，
-                  若有最新消息會立即通知!
-                </h3>
+              <div class="modal-body text-center">
+                <h3>感謝您的訂閱</h3>
+                <h3>若有最新消息會立即通知!</h3>
                 <img src="../assets/img/bazzi.gif" alt="BazziSub" />
               </div>
             </div>
@@ -213,6 +240,7 @@
 import NavBar from '@/components/customer/NavBar'
 import Footer from '@/components/customer/Footer'
 import Alert from '@/components/common/AlertMessage'
+// import $ from 'jquery'
 export default {
   name: 'Home',
   components: {
@@ -264,6 +292,7 @@ export default {
       }
     }
   },
+
   methods: {
     getAllProducts () {
       const vm = this
@@ -289,10 +318,23 @@ export default {
       const path = `/product/${id}`
       this.$router.push(path).catch(err => err)
       this.getProduct(id)
+    },
+    toShop (category) {
+      setTimeout(() => {
+        // 若沒設延時emmit就馬上執行，$on還沒created，就會導致無法接收
+        this.$bus.$emit('message:category', category)
+      }, 500)
+      this.$router.push('/shop')
+    },
+    scrollToWhere (el) {
+      console.log(el)
+      const scrollY = window.scrollY
+      const totalHeight = scrollY + window.innerHeight
+      console.log(el.offsetTop, el.height)
+      if (el.offsetTop + (el.height / 2) < totalHeight) {
+        el.classList.add('active')
+      }
     }
-  },
-  created () {
-    this.getAllProducts()
   },
   computed: {
     swiper () {
@@ -302,10 +344,17 @@ export default {
       const vm = this
       return vm.products.filter(item => item.category === vm.category)
     }
+
+  },
+  created () {
+    this.getAllProducts()
   },
   mounted () {
-    console.log('Current Swiper instance object', this.swiper)
     this.swiper.slideTo(3, 1000, false)
+    window.addEventListener('scroll', this.scrollToWhere)
+  },
+  destroyed () {
+    window.removeEventListener('scroll', this.scrollToWhere)
   }
 }
 </script>

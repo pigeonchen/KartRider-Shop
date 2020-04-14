@@ -186,10 +186,14 @@ export default {
         this.getCart()
         $('#productModal').modal('hide')
         if (res.data.success) {
-          this.$bus.$emit('message:push', '已增加至購物車', 'success')
-          this.$bus.$emit('updateCart')
+          setTimeout(() => {
+            this.$bus.$emit('message:push', '已增加至購物車', 'success')
+            this.$bus.$emit('updateCart')
+          }, 500)
         } else {
-          this.$bus.$emit('message:push', '增加至購物車失敗', 'danger')
+          setTimeout(() => {
+            this.$bus.$emit('message:push', '增加至購物車失敗', 'danger')
+          }, 500)
         }
       })
     },

@@ -7,7 +7,7 @@
     </loading>
     <div class="container py-3">
       <div class="row">
-        <div class="col-lg-6 col-md-12">
+        <div class="col-lg-6 col-md-12 mb-5">
           <h3 class="text-center">購物車資訊</h3>
           <div class="cart-details mb-3">
             <table class="table">

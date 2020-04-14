@@ -63,6 +63,9 @@ export default {
     })
     // 送出消息
     // vm.$bus.$emit('message:push')
+  },
+  beforeDestroy () {
+    this.$bus.$off('message:push', this.openMessage)
   }
 
 }

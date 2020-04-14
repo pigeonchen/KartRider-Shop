@@ -27,6 +27,16 @@ Validator.localize('zh_TW', zhTWValidate)
 Vue.config.productionTip = false
 Vue.component('Loading', Loading)
 Vue.filter('currency', currencyFilter)
+Vue.directive('scroll', {
+  inserted: function (el, binding) {
+    const f = function (evt) {
+      if (binding.value(evt, el)) {
+        window.removeEventListener('scroll', f)
+      }
+    }
+    window.addEventListener('scroll', f)
+  }
+})
 
 // 判斷是否為跨域存取
 // Access-Control-Allow-Credentials
@@ -34,6 +44,17 @@ Vue.filter('currency', currencyFilter)
 axios.defaults.withCredentials = true
 new Vue({
   router,
+  methods: {
+    scrollToWhere (el) {
+      console.log(el)
+      const scrollY = window.scrollY
+      const totalHeight = scrollY + window.innerHeight
+      console.log(el.offsetTop, el.height)
+      if (el.offsetTop + (el.height / 2) < totalHeight) {
+        el.classList.add('active')
+      }
+    }
+  },
   render: h => h(App)
 }).$mount('#app')
 router.beforeEach((to, from, next) => {

@@ -1,12 +1,22 @@
 <template>
-  <div>
-    <nav class="navbar navbar-expand-lg bg-primary">
+  <div class="bg-primary">
+    <nav class="navbar navbar-expand-lg container">
       <div class="navbar-header d-flex">
         <router-link class="pt-1" to="/">
           <img class="navbar-brand-img" src="@/assets/img/kart-logo.png" alt="kart-rider-logo" />
         </router-link>
         <div class="navbar-icons">
           <ul class="navbar-nav d-flex flex-row">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav mx-3">
+                <li class="nav-item mr-3">
+                  <router-link class="nav-link" to="/about">關於</router-link>
+                </li>
+                <li class="nav-item">
+                  <router-link class="nav-link" to="/shop">商城</router-link>
+                </li>
+              </ul>
+            </div>
             <!--下拉按鈕 -->
             <li class="nav-item mr-3">
               <a
@@ -134,16 +144,6 @@
             </li>
           </ul>
         </div>
-      </div>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mx-3">
-          <li class="nav-item mr-3">
-            <router-link class="nav-link" to="/about">關於</router-link>
-          </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="/shop">商城</router-link>
-          </li>
-        </ul>
       </div>
     </nav>
   </div>

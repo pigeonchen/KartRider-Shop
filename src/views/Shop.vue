@@ -3,7 +3,7 @@
     <NavBar></NavBar>
     <main>
       <Alert></Alert>
-      <div class="container-fluid" style="min-height: 81vh">
+      <div class="container" style="min-height: 81vh">
         <div class="row mb-3">
           <div class="col-12">
             <div class="background">
@@ -34,17 +34,17 @@
                 <li
                   class="list-group-item product-sidebar-items"
                   :class="{'active': tempCategory === '競速車'}"
-                  @click="tempCategory = '競速車'"
+                  @click="tempCategory='競速車' ;getCategoryProducts('競速車')"
                 >競速車</li>
                 <li
                   class="list-group-item product-sidebar-items"
                   :class="{'active': tempCategory === '道具車'}"
-                  @click="tempCategory = '道具車'"
+                  @click="tempCategory='道具車';getCategoryProducts('道具車')"
                 >道具車</li>
                 <li
                   class="list-group-item product-sidebar-items"
                   :class="{'active': tempCategory === '角色'}"
-                  @click="tempCategory = '角色'"
+                  @click="tempCategory='角色';getCategoryProducts('角色')"
                 >角色</li>
               </ul>
             </div>
@@ -57,7 +57,7 @@
               </template>
             </loading>
             <div class="row">
-              <div class="col-lg-4 mb-4" v-for="item in filterProducts" :key="item.id">
+              <div class="col-lg-4 mb-4" v-for="item in filterData" :key="item.id">
                 <div class="card shadow-sm h-100">
                   <a type="button" class="myfavorite">
                     <i
@@ -110,7 +110,7 @@
               </div>
             </div>
             <!--pagination  -->
-            <Pagination :pagination="pagination" @getpage="getProducts" v-if="tempCategory===''"></Pagination>
+            <Pagination :pagination="pagination" @getpage="getAllProducts" v-if="tempCategory===''"></Pagination>
           </div>
         </div>
       </div>
@@ -137,7 +137,6 @@ export default {
   data () {
     return {
       products: [],
-      categoryProducts: [],
       product: {
         num: 1
       },
@@ -150,7 +149,7 @@ export default {
     }
   },
   methods: {
-    getProducts (page = 1) {
+    getAllProducts (page = 1) {
       const vm = this
       const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/products?page=${page}`
       vm.isloading = true
@@ -160,12 +159,16 @@ export default {
         vm.pagination = res.data.pagination
       })
     },
-    getAllProducts () {
+    getCategoryProducts (category) {
       const vm = this
+      vm.tempCategory = category
       const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/products/all`
       vm.isloading = true
       this.$http.get(url).then((res) => {
-        vm.categotyProducts = res.data.products
+        vm.products = res.data.products
+        if (vm.tempCategory) {
+          vm.products.filter(item => item.category === vm.tempCategory)
+        }
         vm.isloading = false
       })
     },
@@ -238,29 +241,34 @@ export default {
     }
   },
   computed: {
-    filterProducts () {
+    filterData () {
       const vm = this
       if (vm.tempCategory === '') {
         return vm.products
       } else {
-        return vm.categotyProducts.filter(item => item.category === vm.tempCategory)
+        return vm.products.filter(item => item.category === vm.tempCategory)
       }
     }
   },
   created () {
     const vm = this
-    this.getAllProducts()
-    this.getProducts()
-    this.getCart()
-    this.getFavorites()
+    vm.getAllProducts()
+    vm.getCart()
+    vm.getFavorites()
     vm.$bus.$on('productFavor:get', () => vm.getFavorites())
+    vm.$bus.$on('message:category', (item) => vm.getCategoryProducts(item))
+  },
+  beforeDestroy () {
+    const vm = this
+    vm.$bus.$off('productFavor:get')
+    vm.$bus.$off('message:category')
   }
 }
 
 </script>
 
 <style lang="scss" scoped>
-  .container-fluid {
+  .container {
     margin-top: 20px;
   }
   .sticky-top {
