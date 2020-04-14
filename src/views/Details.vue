@@ -3,6 +3,11 @@
     <NavBar></NavBar>
     <Alert></Alert>
     <main>
+      <loading :active.sync="isloading">
+        <template name="default">
+          <div class="bazzi-loading"></div>
+        </template>
+      </loading>
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
           <li class="breadcrumb-item" aria-current="page">
@@ -68,8 +73,20 @@
         </div>
       </div>
       <div class="container py-5">
-        <h3 class="text-center">推薦商品</h3>
-        <ProductsSwiper :productsList="filterProducts" @directProduct="directProduct"></ProductsSwiper>
+        <h3 class="text-center mb-5">推薦商品</h3>
+        <swiper ref="mySwiper" :options="detailOptions">
+          <swiper-slide v-for="item in filterProducts" :key="item.id">
+            <div class="swiper-picture">
+              <img class="swiper-img" :src="item.imageUrl" alt="item.title" />
+              <div class="swiper-info">
+                <div
+                  class="swiper-info--btn btn btn-outline-primary"
+                  @click.prevent="directProduct(item.id)"
+                >前往商品</div>
+              </div>
+            </div>
+          </swiper-slide>
+        </swiper>
       </div>
     </main>
     <Footer></Footer>
@@ -80,14 +97,14 @@ import $ from 'jquery'
 import NavBar from '@/components/customer/NavBar'
 import Footer from '@/components/customer/Footer'
 import Alert from '@/components/common/AlertMessage'
-import ProductsSwiper from '@/components/customer/ProductsSwiper'
+
 export default {
   name: 'Shop',
   components: {
     NavBar,
     Footer,
-    Alert,
-    ProductsSwiper
+    Alert
+
   },
   data () {
     return {
@@ -99,7 +116,30 @@ export default {
       isloading: false,
       loadingItem: '',
       description: '',
-      content: ''
+      content: '',
+      // swiper
+      detailOptions: {
+        speed: 500,
+        autoplay: true,
+        breakpoints: {
+          768: {
+            slidesPerView: 2,
+            spaceBetween: 30
+          },
+          992: {
+            slidesPerView: 3,
+            spaceBetween: 30
+          },
+          1280: {
+            slidesPerView: 4,
+            spaceBetween: 30
+          }
+        },
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true
+        }
+      }
     }
   },
   methods: {
@@ -186,6 +226,9 @@ export default {
     filterProducts () {
       const vm = this
       return vm.products.filter((item) => item.category === vm.product.category && item.id !== vm.product.id)
+    },
+    swiper () {
+      return this.$refs.mySwiper.$swiper
     }
   },
   created () {
@@ -217,5 +260,56 @@ export default {
         color: rgb(68, 64, 64);
       }
     }
+  }
+  //swiper
+  .swiper {
+    &-picture {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      padding: 2rem;
+      background-color: #343a40;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+    &-img {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      background-color: #343a40;
+    }
+    &-info {
+      width: 100%;
+      height: 0;
+      background: rgba(245, 245, 245, 0.45);
+      position: absolute;
+      top: 0;
+      left: 0;
+      transition: display 0.5s;
+      &--btn {
+        position: absolute;
+        opacity: 0;
+        width: 80%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+    &-button-next {
+      right: 0;
+    }
+    &-picture:hover {
+      .swiper-info {
+        height: 100%;
+      }
+      .swiper-info--btn {
+        opacity: 1;
+      }
+    }
+  }
+  .my-button-disabled {
+    opacity: 0;
   }
 </style>

@@ -7,7 +7,7 @@
         </router-link>
         <div class="navbar-icons">
           <ul class="navbar-nav d-flex flex-row">
-            <!--hambager -->
+            <!--下拉按鈕 -->
             <li class="nav-item mr-3">
               <a
                 class="navbar-toggler nav-link"
@@ -26,18 +26,16 @@
                 <i class="fas fa-user"></i>
               </router-link>
             </li>
+            <!-- 我的最愛 -->
             <li class="nav-item nav-link mr-3">
               <i
-                class="fas fa-heart"
+                class="fas fa-heart nav-icon"
                 id="dropdownFavorButton"
                 data-toggle="dropdown"
                 aria-haspopup="true"
                 aria-expanded="false"
               ></i>
-
-              <!-- favorites-badge -->
-              <span class="badge badge-pill badge-danger" v-if="favorites">{{favorites.length}}</span>
-              <!-- favorites-dropdown -->
+              <span class="badge badge-danger" v-if="favorites">{{favorites.length}}</span>
               <div
                 class="dropdown-menu dropdown-menu-right mr-1"
                 aria-labelledby="dropdownFavorButton"
@@ -49,18 +47,22 @@
                   <tbody>
                     <tr v-for="(item) in favorites" :key="item.id">
                       <td
-                        class="text-sbbrown w-75"
+                        class="text-center w-75 font-weight-bold"
                         @click="$router.push(`/product/${item.id}`)"
                       >{{ item.title }}</td>
-                      <td>
-                        <button type="button" class="btn btn-warning" @click="addCart(item.id)">
+                      <td class="pr-0">
+                        <button
+                          type="button"
+                          class="btn btn-sm btn-warning"
+                          @click="addCart(item.id)"
+                        >
                           <i class="fas fa-shopping-cart"></i>
                         </button>
                       </td>
                       <td>
                         <button
                           type="button"
-                          class="btn btn-danger"
+                          class="btn btn-sm btn-danger"
                           @click="removeFavorItem (item.id)"
                         >
                           <i class="far fa-trash-alt"></i>
@@ -72,9 +74,9 @@
               </div>
             </li>
             <!-- 購物車 -->
-            <li class="nav-item nav-link mr-3">
+            <li class="nav-item nav-link mr-2">
               <i
-                class="fas fa-cart-arrow-down"
+                class="fas fa-cart-arrow-down nav-icon"
                 id="dropdownMenuButton"
                 data-toggle="dropdown"
                 aria-haspopup="true"
@@ -83,7 +85,7 @@
               ></i>
               <!-- cart-badge -->
               <span
-                class="badge badge-pill badge-danger"
+                class="badge badge-danger"
                 v-if="cartContents.carts"
               >{{cartContents.carts.length}}</span>
               <!-- cart-dropdown -->
@@ -242,9 +244,13 @@ export default {
   }
   .badge {
     position: absolute;
-    top: 5px;
-    right: -6px;
-    text-align: center;
-    font-size: 0.5rem;
+    top: 3px;
+    right: -0.6em;
+    background-color: red;
+    width: 1rem;
+    height: 1rem;
+    font-size: 0.3rem;
+    border-radius: 50px;
+    color: #fff;
   }
 </style>

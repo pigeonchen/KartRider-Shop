@@ -13,8 +13,6 @@
         </div>
       </swiper-slide>
     </swiper>
-    <div class="swiper-button-prev" slot="button-prev"></div>
-    <div class="swiper-button-next" slot="button-next"></div>
   </div>
 </template>
 
@@ -24,16 +22,30 @@ export default {
   props: ['productsList'],
   data () {
     return {
-      swiperOptions: {
-        autoplay: 3000,
-        slidesPerView: 4,
-        navigation: {
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev',
-          disabledClass: 'my-button-disabled'
+      swiperOptionMuch: {
+        slidesPerView: 1,
+        spaceBetween: 20,
+        speed: 500,
+        autoplay: true,
+        breakpoints: {
+          768: {
+            slidesPerView: 2,
+            spaceBetween: 30
+          },
+          992: {
+            slidesPerView: 3,
+            spaceBetween: 40
+          },
+          1280: {
+            slidesPerView: 4,
+            spaceBetween: 50
+          }
+        },
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true
         }
-      },
-      products: []
+      }
     }
   },
   computed: {
