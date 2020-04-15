@@ -59,7 +59,7 @@
         <div class="container p-0">
           <div class="row no-gutters">
             <div class="col-lg-6 col-sm-12 d-flex justify-content-center">
-              <img src="@/assets/img/Ranger.png" alt="ranger" class="products-img" />
+              <img src="@/assets/img/Ranger.png" alt="ranger" class="products-img" data-aos="fade" />
             </div>
             <div class="col-lg-6 col-sm-12">
               <div class="products-content text-center">
@@ -77,7 +77,7 @@
           </div>
           <div class="row no-gutters d-flex flex-sm-row flex-lg-row-reverse">
             <div class="col-lg-6 col-sm-12 d-flex justify-content-center">
-              <img src="@/assets/img/Broom.png" alt="ranger" class="products-img" />
+              <img src="@/assets/img/Broom.png" alt="ranger" class="products-img" data-aos="fade" />
             </div>
             <div class="col-lg-6 col-sm-12">
               <div class="products-content text-center">
@@ -95,7 +95,7 @@
           </div>
           <div class="row no-gutters">
             <div class="col-lg-6 col-sm-12 d-flex justify-content-center">
-              <img src="@/assets/img/Bazzi.png" alt="ranger" class="products-img" />
+              <img src="@/assets/img/Bazzi.png" alt="ranger" class="products-img" data-aos="fade" />
             </div>
             <div class="col-lg-6 col-sm-12">
               <div class="products-content text-center">

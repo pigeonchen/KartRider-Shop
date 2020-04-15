@@ -9,10 +9,11 @@ import zhTWValidate from 'vee-validate/dist/locale/zh_TW'
 import VueAxios from 'vue-axios'
 import VueClipboard from 'vue-clipboard2'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
+import AOS from 'aos'
 
 // import style
 import 'swiper/css/swiper.css'
-
+import 'aos/dist/aos.css'
 // 自訂
 import App from './App.vue'
 import router from './router'
@@ -35,7 +36,9 @@ Vue.filter('currency', currencyFilter)
 // 用來解決CROS
 axios.defaults.withCredentials = true
 new Vue({
-
+  created () {
+    AOS.init()
+  },
   router,
   render: h => h(App)
 }).$mount('#app')
