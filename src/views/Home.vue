@@ -1,5 +1,5 @@
 
-<template>
+<template >
   <div>
     <loading :active.sync="isloading">
       <template name="default">
@@ -59,12 +59,7 @@
         <div class="container p-0">
           <div class="row no-gutters">
             <div class="col-lg-6 col-sm-12 d-flex justify-content-center">
-              <img
-                src="@/assets/img/Ranger.png"
-                alt="ranger"
-                class="products-img"
-                ref="imagePosition"
-              />
+              <img src="@/assets/img/Ranger.png" alt="ranger" class="products-img" />
             </div>
             <div class="col-lg-6 col-sm-12">
               <div class="products-content text-center">
@@ -82,12 +77,7 @@
           </div>
           <div class="row no-gutters d-flex flex-sm-row flex-lg-row-reverse">
             <div class="col-lg-6 col-sm-12 d-flex justify-content-center">
-              <img
-                src="@/assets/img/Broom.png"
-                alt="ranger"
-                class="products-img"
-                ref="imagePosition"
-              />
+              <img src="@/assets/img/Broom.png" alt="ranger" class="products-img" />
             </div>
             <div class="col-lg-6 col-sm-12">
               <div class="products-content text-center">
@@ -105,12 +95,7 @@
           </div>
           <div class="row no-gutters">
             <div class="col-lg-6 col-sm-12 d-flex justify-content-center">
-              <img
-                src="@/assets/img/Bazzi.png"
-                alt="ranger"
-                class="products-img"
-                ref="imagePosition"
-              />
+              <img src="@/assets/img/Bazzi.png" alt="ranger" class="products-img" />
             </div>
             <div class="col-lg-6 col-sm-12">
               <div class="products-content text-center">
@@ -240,6 +225,7 @@
 import NavBar from '@/components/customer/NavBar'
 import Footer from '@/components/customer/Footer'
 import Alert from '@/components/common/AlertMessage'
+
 // import $ from 'jquery'
 export default {
   name: 'Home',
@@ -306,11 +292,15 @@ export default {
     copyCouponCode () {
       const vm = this
       this.$copyText(this.message).then(
-        () => {
-          this.$bus.$emit('message:push', '複製成功', 'success')
+        function () {
+          setTimeout(() => {
+            vm.$bus.$emit('message:push', '複製成功', 'success')
+          }, 500)
         },
-        () => {
-          vm.$bus.$emit('message:push', '複製失敗', 'danger')
+        function () {
+          setTimeout(() => {
+            vm.$bus.$emit('message:push', '複製失敗', 'danger')
+          }, 500)
         }
       )
     },
@@ -326,15 +316,11 @@ export default {
       }, 500)
       this.$router.push('/shop')
     },
-    scrollToWhere (el) {
-      console.log(el)
-      const scrollY = window.scrollY
-      const totalHeight = scrollY + window.innerHeight
-      console.log(el.offsetTop, el.height)
-      if (el.offsetTop + (el.height / 2) < totalHeight) {
-        el.classList.add('active')
-      }
+    onScroll () {
+      const scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
+      console.log(scrollTop)
     }
+
   },
   computed: {
     swiper () {
@@ -348,14 +334,15 @@ export default {
   },
   created () {
     this.getAllProducts()
+    window.addEventListener('scroll', this.onScroll)
   },
   mounted () {
     this.swiper.slideTo(3, 1000, false)
-    window.addEventListener('scroll', this.scrollToWhere)
   },
   destroyed () {
-    window.removeEventListener('scroll', this.scrollToWhere)
+    window.removeEventListener('scroll', this.onScroll)
   }
+
 }
 </script>
 <style lang="scss" >

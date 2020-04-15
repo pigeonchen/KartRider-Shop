@@ -8,23 +8,26 @@
           <div class="bazzi-loading"></div>
         </template>
       </loading>
-      <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item" aria-current="page">
-            <router-link to="/">首頁</router-link>
-          </li>
-          <li class="breadcrumb-item" aria-current="page">
-            <router-link to="/shop">商城</router-link>
-          </li>
-          <li class="breadcrumb-item" aria-current="page">{{product.title}}</li>
-        </ol>
-      </nav>
-      <div class="container py-5">
+
+      <div class="container p-0 py-3">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item" aria-current="page">
+              <router-link to="/">首頁</router-link>
+            </li>
+            <li class="breadcrumb-item" aria-current="page">
+              <router-link to="/shop">商城</router-link>
+            </li>
+            <li class="breadcrumb-item" aria-current="page">{{product.title}}</li>
+          </ol>
+        </nav>
         <div class="row d-flex">
-          <div class="col-lg-6 col-sm-12 d-flex justify-content-center align-items-center bg-dark">
-            <img class="w-100" :src="product.imageUrl" :alt="product.title" />
+          <div
+            class="col-lg-5 col-sm-12 d-flex justify-content-center align-items-center bg-dark ml-3"
+          >
+            <img :src="product.imageUrl" :alt="product.title" />
           </div>
-          <div class="info col-lg-5 col-sm-12 ml-2 p-3">
+          <div class="info col-lg-6 col-sm-12 ml-2">
             <div class="info-title d-flex justify-content-between mb-3">
               <h1>{{ product.title }}</h1>
               <span class="ml-1 badge badge-secondary">{{product.category}}</span>
@@ -46,7 +49,7 @@
               </div>
             </div>
 
-            <div class="info-details mb-3">
+            <div class="info-details my-3">
               <h5>商品描述</h5>
               <div class="mb-4" v-html="description"></div>
               <h5>商品特色</h5>
