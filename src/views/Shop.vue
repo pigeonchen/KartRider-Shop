@@ -29,7 +29,7 @@
                 <li
                   class="list-group-item product-sidebar-items"
                   :class="{'active': tempCategory === ''}"
-                  @click="tempCategory = ''"
+                  @click="tempCategory = ''; getAllProducts() "
                 >所有商品</li>
                 <li
                   class="list-group-item product-sidebar-items"
@@ -218,7 +218,7 @@ export default {
       const vm = this
 
       // 儲存有在this.favorites中資料的index
-      if (vm.favorites.length === 0 || vm.favorites.some(item => item.id !== product.id)) {
+      if (vm.favorites.length === 0 || vm.favorites.every(item => item.id !== product.id)) {
         vm.favorites.push(product)
       } else {
         // 存在則移除
