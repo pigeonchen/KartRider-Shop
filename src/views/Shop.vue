@@ -59,7 +59,7 @@
             <div class="row">
               <div class="col-lg-4 mb-4" v-for="item in filterData" :key="item.id">
                 <div class="card shadow-sm h-100">
-                  <a type="button" class="myfavorite">
+                  <a class="myfavorite">
                     <i
                       class="fas fa-heart"
                       v-if="isfavored (item)"
