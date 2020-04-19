@@ -249,7 +249,7 @@ export default {
     background-color: red;
     width: 1rem;
     height: 1rem;
-    font-size: 0.3rem;
+    font-size: 10px;
     border-radius: 50px;
     color: #fff;
   }

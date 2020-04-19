@@ -9,7 +9,7 @@
         </template>
       </loading>
 
-      <div class="container p-0 py-3">
+      <div class="container p-3">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb">
             <li class="breadcrumb-item" aria-current="page">
@@ -21,14 +21,14 @@
             <li class="breadcrumb-item" aria-current="page">{{product.title}}</li>
           </ol>
         </nav>
-        <div class="row d-flex">
+        <div class="row no-gutters py-2">
           <div
-            class="col-lg-5 col-sm-12 d-flex justify-content-center align-items-center bg-dark ml-3"
+            class="col-lg-5 col-sm-12 d-flex justify-content-center align-items-center bg-dark mx-md-0 mr-lg-5"
           >
             <img :src="product.imageUrl" :alt="product.title" />
           </div>
-          <div class="info col-lg-6 col-sm-12 ml-2">
-            <div class="info-title d-flex justify-content-between mb-3">
+          <div class="info col-lg-6 col-sm-12">
+            <div class="info-title d-flex justify-content-between">
               <h1>{{ product.title }}</h1>
               <span class="ml-1 badge badge-secondary">{{product.category}}</span>
             </div>
@@ -74,22 +74,22 @@
             >加入購物車</button>
           </div>
         </div>
-      </div>
-      <div class="container py-5">
-        <h3 class="text-center mb-5">推薦商品</h3>
-        <swiper ref="mySwiper" :options="detailOptions">
-          <swiper-slide v-for="item in filterProducts" :key="item.id">
-            <div class="swiper-picture">
-              <img class="swiper-img" :src="item.imageUrl" alt="item.title" />
-              <div class="swiper-info">
-                <div
-                  class="swiper-info--btn btn btn-outline-primary"
-                  @click.prevent="directProduct(item.id)"
-                >前往商品</div>
+        <div class="swiper row mt-5">
+          <h3 class="text-center mb-5 col-12">推薦商品</h3>
+          <swiper ref="mySwiper" :options="detailOptions" class="p-0 text-center mb-5 col-12">
+            <swiper-slide v-for="item in filterProducts" :key="item.id">
+              <div class="swiper-picture">
+                <img class="swiper-img" :src="item.imageUrl" alt="item.title" />
+                <div class="swiper-info">
+                  <div
+                    class="swiper-info--btn btn btn-outline-primary"
+                    @click.prevent="directProduct(item.id)"
+                  >前往商品</div>
+                </div>
               </div>
-            </div>
-          </swiper-slide>
-        </swiper>
+            </swiper-slide>
+          </swiper>
+        </div>
       </div>
     </main>
     <Footer></Footer>
@@ -270,22 +270,19 @@ export default {
   }
   //swiper
   .swiper {
+    margin: 0 auto;
     &-picture {
-      width: 100%;
-      height: 100%;
       position: relative;
-      padding: 2rem;
       background-color: #343a40;
-
       &:last-child {
         margin-right: 0;
       }
     }
     &-img {
-      width: 100%;
-      height: 100%;
+      width: 90%;
+      height: 90%;
       position: relative;
-      background-color: #343a40;
+      transition: all 0.5s;
     }
     &-info {
       width: 100%;
@@ -294,18 +291,16 @@ export default {
       position: absolute;
       top: 0;
       left: 0;
-      transition: display 0.5s;
+      transition: all 0.5s;
       &--btn {
         position: absolute;
         opacity: 0;
-        width: 80%;
+        width: 300px;
+        max-width: 80%;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
       }
-    }
-    &-button-next {
-      right: 0;
     }
     &-picture:hover {
       .swiper-info {
