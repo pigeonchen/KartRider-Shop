@@ -58,7 +58,7 @@
         <h1 class="m-title">商品種類</h1>
         <div class="container p-0">
           <div class="row no-gutters">
-            <div class="col-lg-6 col-sm-12 d-flex justify-content-center">
+            <div class="col-lg-6 col-sm-12 d-flex justify-content-center p-3">
               <img src="@/assets/img/Ranger.png" alt="ranger" class="products-img" data-aos="fade" />
             </div>
             <div class="col-lg-6 col-sm-12">
@@ -76,7 +76,7 @@
             </div>
           </div>
           <div class="row no-gutters d-flex flex-sm-row flex-lg-row-reverse">
-            <div class="col-lg-6 col-sm-12 d-flex justify-content-center">
+            <div class="col-lg-6 col-sm-12 d-flex justify-content-center p-3">
               <img src="@/assets/img/Broom.png" alt="ranger" class="products-img" data-aos="fade" />
             </div>
             <div class="col-lg-6 col-sm-12">
@@ -94,7 +94,7 @@
             </div>
           </div>
           <div class="row no-gutters">
-            <div class="col-lg-6 col-sm-12 d-flex justify-content-center">
+            <div class="col-lg-6 col-sm-12 d-flex justify-content-center p-3">
               <img src="@/assets/img/Bazzi.png" alt="ranger" class="products-img" data-aos="fade" />
             </div>
             <div class="col-lg-6 col-sm-12">
