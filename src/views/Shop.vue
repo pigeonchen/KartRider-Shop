@@ -89,20 +89,12 @@
                         >售價{{item.price}} 元</p>
                       </div>
                       <div class="d-flex align-items-end">
-                        <button
-                          type="button"
-                          class="btn btn-sm btn-primary mr-2"
-                          @click="getProduct(item.id)"
-                        >
+                        <span class="btn btn-sm btn-primary mr-2" @click="getProduct(item.id)">
                           <i class="fas fa-info-circle"></i>
-                        </button>
-                        <button
-                          type="button"
-                          class="btn btn-sm btn-warning"
-                          @click="addCart(item.id,1)"
-                        >
+                        </span>
+                        <span class="btn btn-sm btn-warning" @click="addCart(item.id,1)">
                           <i class="fas fa-shopping-cart"></i>
-                        </button>
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -193,10 +185,14 @@ export default {
       }
       this.$http.post(url, { data: cart }).then((res) => {
         if (res.data.success) {
-          this.$bus.$emit('message:push', '已增加至購物車', 'success')
-          this.$bus.$emit('updateCart')
+          setTimeout(() => {
+            this.$bus.$emit('message:push', '已增加至購物車', 'success')
+            this.$bus.$emit('updateCart')
+          }, 500)
         } else {
-          this.$bus.$emit('message:push', '增加至購物車失敗', 'danger')
+          setTimeout(() => {
+            this.$bus.$emit('message:push', '增加至購物車失敗', 'danger')
+          }, 500)
         }
         vm.isloading = false
       })
