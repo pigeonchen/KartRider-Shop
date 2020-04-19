@@ -200,6 +200,7 @@ export default {
         }
       })
     },
+    // 將後端產品描述換行
     turnDetails () {
       const vm = this
       const { description, content } = vm.product

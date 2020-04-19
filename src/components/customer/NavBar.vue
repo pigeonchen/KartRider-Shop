@@ -219,7 +219,7 @@ export default {
     vm.$bus.$on('updateCart', vm.getCart)
     vm.$bus.$on('favor:get', () => vm.getFavorites())
   },
-  beforeDestroy () {
+  destroy () {
     this.$bus.$off('updateCart')
   }
 }
