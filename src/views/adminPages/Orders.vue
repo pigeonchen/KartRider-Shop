@@ -1,7 +1,7 @@
 
 <template>
   <div class="text-center">
-    <loading :active.sync="isloading">
+    <loading :active.sync="isLoading">
       <template name="default">
         <div class="bazzi-loading"></div>
       </template>

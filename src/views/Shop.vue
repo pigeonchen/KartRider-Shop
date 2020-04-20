@@ -185,14 +185,10 @@ export default {
       }
       this.$http.post(url, { data: cart }).then((res) => {
         if (res.data.success) {
-          setTimeout(() => {
-            this.$bus.$emit('message:push', '已增加至購物車', 'success')
-            this.$bus.$emit('updateCart')
-          }, 500)
+          this.$bus.$emit('message:push', '已增加至購物車', 'success')
+          this.$bus.$emit('updateCart')
         } else {
-          setTimeout(() => {
-            this.$bus.$emit('message:push', '增加至購物車失敗', 'danger')
-          }, 500)
+          this.$bus.$emit('message:push', '增加至購物車失敗', 'danger')
         }
         vm.isloading = false
       })

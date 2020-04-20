@@ -1,5 +1,6 @@
 // vue 套件
 import Vue from 'vue'
+import Vuex from 'vuex'
 import axios from 'axios'
 import 'bootstrap'
 import Loading from 'vue-loading-overlay'
@@ -18,8 +19,11 @@ import 'aos/dist/aos.css'
 import App from './App.vue'
 import router from './router'
 import './bus.js'
-import currencyFilter from './components/filters/Currency'
+import currencyFilter from './components/filters/currency.js'
+import dateFilter from './components/filters/date.js'
+import store from './store/index.js'
 
+Vue.use(Vuex)
 Vue.use(VueAxios, axios)
 Vue.use(VeeValidate)
 Vue.use(VueAwesomeSwiper)
@@ -30,6 +34,7 @@ Validator.localize('zh_TW', zhTWValidate)
 Vue.config.productionTip = false
 Vue.component('Loading', Loading)
 Vue.filter('currency', currencyFilter)
+Vue.filter('date', dateFilter)
 
 // 判斷是否為跨域存取
 // Access-Control-Allow-Credentials
@@ -39,7 +44,9 @@ new Vue({
   created () {
     AOS.init()
   },
+
   router,
+  store,
   render: h => h(App)
 }).$mount('#app')
 

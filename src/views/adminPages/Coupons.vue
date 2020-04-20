@@ -1,6 +1,6 @@
  <template>
   <div class="text-center">
-    <loading :active.sync="isloading">
+    <loading :active.sync="isLoading">
       <template name="default">
         <div class="bazzi-loading"></div>
       </template>
@@ -27,7 +27,7 @@
             <span class="text-success" v-else>未啟用</span>
           </td>
           <td>{{item.percent}} %</td>
-          <td>{{item.due_date}}</td>
+          <td>{{item.due_date | date}}</td>
           <td>{{item.code}}</td>
           <td>
             <button class="btn btn-outline-primary btn-sm mr-1" @click=" openModal('edit',item)">編輯</button>
@@ -84,12 +84,7 @@
                 </div>
                 <div class="form-group">
                   <label for="due_date">截止日期</label>
-                  <input
-                    type="date"
-                    class="form-control"
-                    id="due_date"
-                    v-model="tempCoupon.due_date"
-                  />
+                  <input type="date" class="form-control" id="due_date" v-model="due_date" />
                 </div>
                 <div class="form-group">
                   <label for="code">優惠碼</label>
@@ -169,6 +164,7 @@ export default {
       coupons: [],
       tempCoupon: {
       },
+      due_date: new Date(),
       isNew: false,
       openModalMethod: '',
       isLoading: false,
@@ -186,8 +182,9 @@ export default {
       vm.isLoading = true
       this.$http.get(api).then(res => {
         vm.coupons = res.data.coupons
-        vm.isLoading = false
         vm.pagination = res.data.pagination
+        console.log(res.data.coupons.due_date)
+        vm.isLoading = false
       })
     },
     openModal (openModalMethod, item) {
@@ -234,6 +231,14 @@ export default {
   },
   created () {
     this.getCoupons()
+  },
+  watch: {
+    due_date () {
+      const vm = this
+      const timestamp = Math.floor(new Date(vm.due_date) / 1000)
+      vm.tempCoupon.due_date = timestamp
+    }
   }
+
 }
 </script>
