@@ -17,7 +17,7 @@
             <source src="../assets/img/kartrider.webm" type="video/webm" />
           </video>
         </div>
-        <swiper ref="HeaderSwiper" :options="headerOptions" class="swiper-box text-center">
+        <swiper :options="headerOptions" class="swiper-box text-center">
           <swiper-slide class="swiper-items">
             <h1>關於跑跑</h1>
             <p class="m-1">是韓國NEXON公司出品的一個休閒類賽車競速遊戲</p>
@@ -69,7 +69,7 @@
                 <p>兇猛的起步推進器</p>
                 <a
                   class="btn btn-lg btn-primary text-white mt-4"
-                  @click.prevent="toShop('競速車')"
+                  @click.prevent="goToCategory('競速車')"
                   role="button"
                 >去看看</a>
               </div>
@@ -87,7 +87,7 @@
                 <p>專屬於道具賽的推進器</p>
                 <a
                   class="btn btn-lg btn-primary text-white mt-4"
-                  @click.prevent="toShop('道具車')"
+                  @click.prevent="goToCategory('道具車')"
                   role="button"
                 >去看看</a>
               </div>
@@ -105,7 +105,7 @@
                 <p>比賽專屬獎勵加成</p>
                 <a
                   class="btn btn-lg btn-primary text-white mt-4"
-                  @click.prevent="toShop('角色')"
+                  @click.prevent="goToCategory('角色')"
                   role="button"
                 >去看看</a>
               </div>
@@ -239,7 +239,7 @@ export default {
       message: '跑跑開幕慶',
       isloading: false,
       products: [],
-      category: '競速車',
+      category: '',
       email: '',
       // headerSwiper
       headerOptions: {
@@ -293,14 +293,10 @@ export default {
       const vm = this
       this.$copyText(this.message).then(
         function () {
-          setTimeout(() => {
-            vm.$bus.$emit('message:push', '複製成功', 'success')
-          }, 500)
+          vm.$store.dispatch('updateMessage', { message: '已複製訊息', status: 'success' })
         },
         function () {
-          setTimeout(() => {
-            vm.$bus.$emit('message:push', '複製失敗', 'danger')
-          }, 500)
+          vm.$store.dispatch('updateMessage', { message: '複製訊息失敗', status: 'danger' })
         }
       )
     },
@@ -309,11 +305,8 @@ export default {
       this.$router.push(path).catch(err => err)
       this.getProduct(id)
     },
-    toShop (category) {
-      setTimeout(() => {
-        // 若沒設延時emmit就馬上執行，$on還沒created，就會導致無法接收
-        this.$bus.$emit('message:category', category)
-      }, 500)
+    goToCategory (category) {
+      this.$store.dispatch('goToCategory', category)
       this.$router.push('/shop')
     },
     onScroll () {
@@ -323,9 +316,6 @@ export default {
 
   },
   computed: {
-    swiper () {
-      return this.$refs.HeaderSwiper.$swiper
-    },
     filterProducts () {
       const vm = this
       return vm.products.filter(item => item.category === vm.category)
@@ -334,13 +324,6 @@ export default {
   },
   created () {
     this.getAllProducts()
-    window.addEventListener('scroll', this.onScroll)
-  },
-  mounted () {
-    this.swiper.slideTo(3, 1000, false)
-  },
-  destroyed () {
-    window.removeEventListener('scroll', this.onScroll)
   }
 
 }

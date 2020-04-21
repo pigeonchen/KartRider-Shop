@@ -28,30 +28,22 @@
               <ul class="list-group product-sidebar mb-3 text-center">
                 <li
                   class="list-group-item product-sidebar-items"
-                  :class="{'active': tempCategory === ''}"
-                  @click="tempCategory = ''; getAllProducts() "
+                  @click="goToCategory('');category = '';getPageProducts(category)"
+                  :class="{'active': category === '' }"
                 >所有商品</li>
                 <li
                   class="list-group-item product-sidebar-items"
-                  :class="{'active': tempCategory === '競速車'}"
-                  @click="tempCategory='競速車' ;getCategoryProducts('競速車')"
-                >競速車</li>
-                <li
-                  class="list-group-item product-sidebar-items"
-                  :class="{'active': tempCategory === '道具車'}"
-                  @click="tempCategory='道具車';getCategoryProducts('道具車')"
-                >道具車</li>
-                <li
-                  class="list-group-item product-sidebar-items"
-                  :class="{'active': tempCategory === '角色'}"
-                  @click="tempCategory='角色';getCategoryProducts('角色')"
-                >角色</li>
+                  :class="{'active':  category === item}"
+                  v-for="(item,index) in categories"
+                  :key="index"
+                  @click="goToCategory(item);category = item;getCategoryProducts(item)"
+                >{{item}}</li>
               </ul>
             </div>
           </div>
           <!-- 商品頁面-->
           <div class="col-lg-9 col-sm-12">
-            <loading :active.sync="isloading">
+            <loading :active.sync="isLoading">
               <template name="default">
                 <div class="bazzi-loading"></div>
               </template>
@@ -102,7 +94,7 @@
               </div>
             </div>
             <!--pagination  -->
-            <Pagination :pagination="pagination" @getpage="getAllProducts" v-if="tempCategory===''"></Pagination>
+            <Pagination :pagination="pagination" @getpage="getPageProducts" v-if="category === ''"></Pagination>
           </div>
         </div>
       </div>
@@ -128,132 +120,75 @@ export default {
   },
   data () {
     return {
-      products: [],
-      product: {
-        num: 1
-      },
-      cartContents: {},
-      tempCategory: '',
-      isloading: false,
-      pagination: [],
-      favorites: []
-
+      category: this.$store.state.productsModule.category || ''
     }
   },
   methods: {
-    getAllProducts (page = 1) {
-      const vm = this
-      const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/products?page=${page}`
-      vm.isloading = true
-      this.$http.get(url).then((res) => {
-        vm.products = res.data.products
-        vm.isloading = false
-        vm.pagination = res.data.pagination
-      })
+    getPageProducts (page = 1, category) {
+      this.$store.dispatch('getPageProducts', { page, category })
     },
     getCategoryProducts (category) {
-      const vm = this
-      vm.tempCategory = category
-      const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/products/all`
-      vm.isloading = true
-      this.$http.get(url).then((res) => {
-        vm.products = res.data.products
-        if (vm.tempCategory) {
-          vm.products.filter(item => item.category === vm.tempCategory)
-        }
-        vm.isloading = false
-      })
+      this.$store.dispatch('getCategoryProducts', category)
     },
     getProduct (id) {
       const vm = this
-      const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/product/${id}`
-      this.$http.get(url).then((res) => {
-        vm.product = res.data.product
-        // 回傳內容沒有數量 num，所以要加入預設值
-        vm.$set(vm.product, 'num', 1)
-        vm.$router.push(`/product/${id}`)
-      })
+      vm.$router.push(`/product/${id}`)
+    },
+    goToCategory (category) {
+      this.$store.dispatch('goToCategory', category)
     },
     // 新增至購物車
     addCart (id, qty = 1) {
-      const vm = this
-      const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart/`
-      vm.isloading = true
-      const cart = {
-        product_id: id,
-        qty
-      }
-      this.$http.post(url, { data: cart }).then((res) => {
-        if (res.data.success) {
-          this.$bus.$emit('message:push', '已增加至購物車', 'success')
-          this.$bus.$emit('updateCart')
-        } else {
-          this.$bus.$emit('message:push', '增加至購物車失敗', 'danger')
-        }
-        vm.isloading = false
-      })
+      this.$store.dispatch('addCart', { id, qty })
     },
     getCart () {
-      const vm = this
-      const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart/`
-      vm.isloading = true
-      this.$http.get(url).then((res) => {
-        vm.cartContents = res.data.data
-        vm.loadingItem = ''
-        vm.isloading = false
-      })
+      this.$store.dispatch('getCart')
     },
     getFavorites () {
-      this.favorites = JSON.parse(localStorage.getItem('favorites')) || []
+      this.$store.dispatch('getFavorites')
     },
     changeFavorite (product) {
-      const vm = this
-
-      // 儲存有在this.favorites中資料的index
-      if (vm.favorites.length === 0 || vm.favorites.every(item => item.id !== product.id)) {
-        vm.favorites.push(product)
-      } else {
-        // 存在則移除
-        const index = vm.favorites.findIndex(item => item.id === product.id)
-        vm.favorites.splice(index, 1)
-      }
-      // 儲存至 localStorage
-      localStorage.setItem('favorites', JSON.stringify(vm.favorites))
-      // 重新整理
-      vm.getFavorites()
-      vm.$bus.$emit('favor:get')
+      this.$store.dispatch('changeFavorite', product)
     },
     // 判斷顯示/隱藏關注樣式
     isfavored (item) {
-      const isfavored = this.favorites.filter(favor => favor.id === item.id)
-      if (isfavored.length > 0) {
+      const isFavored = this.$store.state.favorites.filter(favor => favor.id === item.id)
+      if (isFavored.length > 0) {
         return true
       }
       return false
     }
   },
   computed: {
+    isLoading () {
+      return this.$store.state.isLoading
+    },
     filterData () {
       const vm = this
-      if (vm.tempCategory === '') {
-        return vm.products
-      } else {
-        return vm.products.filter(item => item.category === vm.tempCategory)
+      if (vm.category !== '') {
+        return vm.$store.state.productsModule.products.filter(item => item.category === vm.category)
       }
+      return this.$store.state.productsModule.products
+    },
+    categories () {
+      return this.$store.state.productsModule.categories
+    },
+
+    pagination () {
+      return this.$store.state.productsModule.pagination
+    },
+    carts () {
+      return this.$store.state.carts
+    },
+    favorites () {
+      return this.$store.state.favorites
     }
   },
   created () {
     const vm = this
-    vm.getAllProducts()
+    vm.getPageProducts()
     vm.getCart()
     vm.getFavorites()
-    vm.$bus.$on('productFavor:get', () => vm.getFavorites())
-    vm.$bus.$on('message:category', (item) => vm.getCategoryProducts(item))
-  },
-  beforeDestroy () {
-    const vm = this
-    vm.$bus.$off('productFavor:get')
-    vm.$bus.$off('message:category')
   }
 }
 
