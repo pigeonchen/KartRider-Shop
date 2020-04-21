@@ -239,7 +239,7 @@ export default {
       message: '跑跑開幕慶',
       isloading: false,
       products: [],
-      category: '',
+      category: '競速車',
       email: '',
       // headerSwiper
       headerOptions: {
@@ -281,13 +281,7 @@ export default {
 
   methods: {
     getAllProducts () {
-      const vm = this
-      const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/products/all`
-      vm.isloading = true
-      this.$http.get(url).then((res) => {
-        vm.products = res.data.products
-        vm.isloading = false
-      })
+      this.$store.dispatch('getCategoryProducts')
     },
     copyCouponCode () {
       const vm = this
@@ -316,9 +310,10 @@ export default {
 
   },
   computed: {
+
     filterProducts () {
       const vm = this
-      return vm.products.filter(item => item.category === vm.category)
+      return this.$store.state.productsModule.products.filter(item => item.category === vm.category)
     }
 
   },
