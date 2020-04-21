@@ -21,7 +21,7 @@ import router from './router'
 import './bus.js'
 import currencyFilter from './components/filters/currency.js'
 import dateFilter from './components/filters/date.js'
-import store from './store/index.js'
+import store from './store/index'
 
 Vue.use(Vuex)
 Vue.use(VueAxios, axios)
@@ -44,7 +44,6 @@ new Vue({
   created () {
     AOS.init()
   },
-
   router,
   store,
   render: h => h(App)
