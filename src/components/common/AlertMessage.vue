@@ -23,50 +23,39 @@
 <script>
 export default {
   name: 'AlertMessage',
-  data () {
-    return {
-      messages: []
-    }
-  },
+
   methods: {
     updateMessage (message, status) {
-      const timestamp = Math.floor(new Date() / 1000)
-      this.messages.push({
-        message,
-        status,
-        timestamp
-      })
-      this.removeMessageWithTiming(timestamp)
+      const timestamp = Math.floor(new Date() / 100)
+      this.$store.dispatch('updateMessage', { message, status, timestamp })
     },
     removeMessage (num) {
-      this.messages.splice(num, 1)
+      this.$store.dispatch('removeMessage', num)
     },
     removeMessageWithTiming (timestamp) {
-      const vm = this
-      setTimeout(() => {
-        vm.messages.forEach((item, i) => {
-          if (item.timestamp === timestamp) {
-            vm.messages.splice(i, 1)
-          }
-        })
-      }, 5000)
+      this.$store.dispatch('removeMessageWithTiming', timestamp)
     }
   },
-  created () {
-    const vm = this
-    // 自定義名稱 'messsage:push'
-    // message: 傳入參數
-    // status: 樣式，預設值為 warning
-    // 接收消息
-    vm.$bus.$on('message:push', (message, status = 'warning') => {
-      vm.updateMessage(message, status)
-    })
-    // 送出消息
-    // vm.$bus.$emit('message:push')
-  },
-  beforeDestroy () {
-    this.$bus.$off('message:push', this.openMessage)
+  computed: {
+    messages () {
+      return this.$store.state.messages
+    }
   }
+  // created () {
+  //   const vm = this
+  //   // 自定義名稱 'messsage:push'
+  //   // message: 傳入參數
+  //   // status: 樣式，預設值為 warning
+  //   // 接收消息
+  //   vm.$bus.$on('message:push', (message, status = 'warning') => {
+  //     vm.updateMessage(message, status)
+  //   })
+  //   // 送出消息
+  //   // vm.$bus.$emit('message:push')
+  // },
+  // beforeDestroy () {
+  //   this.$bus.$off('message:push', this.openMessage)
+  // }
 
 }
 </script>

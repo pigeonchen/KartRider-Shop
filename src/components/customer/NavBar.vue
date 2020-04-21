@@ -84,10 +84,7 @@
                 @click="getCart"
               ></i>
               <!-- cart-badge -->
-              <span
-                class="badge badge-danger"
-                v-if="cartContents.carts"
-              >{{cartContents.carts.length}}</span>
+              <span class="badge badge-danger" v-if="carts.carts">{{carts.carts.length}}</span>
               <!-- cart-dropdown -->
               <div
                 class="dropdown-menu dropdown-menu-right mr-1"
@@ -95,9 +92,9 @@
                 style="width: 300px "
               >
                 <h5 class="text-center">購物車內容</h5>
-                <table class="table" v-if="cartContents.carts && cartContents.carts.length > 0">
+                <table class="table" v-if="carts.carts && carts.carts.length > 0">
                   <tbody>
-                    <tr v-for="(item) in cartContents.carts" :key="item.id">
+                    <tr v-for="(item) in carts.carts" :key="item.id">
                       <td>
                         <button
                           type="button"
@@ -115,12 +112,12 @@
                   <tfoot>
                     <tr>
                       <td class="text-right" colspan="3">總計</td>
-                      <td v-if="cartContents.total">{{cartContents.total}}</td>
+                      <td v-if="carts.total">{{carts.total}}</td>
                     </tr>
 
-                    <tr class="text-success" v-if="cartContents.final_total!== cartContents.total">
+                    <tr class="text-success" v-if="carts.final_total!== carts.total">
                       <td class="text-right" colspan="3">折扣價</td>
-                      <td>{{cartContents.final_total}}</td>
+                      <td>{{carts.final_total}}</td>
                     </tr>
                     <tr>
                       <td colspan="4">
@@ -154,73 +151,37 @@ export default {
   name: 'Navbar',
   data () {
     return {
-      cartContents: [],
-      favorites: []
     }
   },
   methods: {
     getCart () {
-      const vm = this
-      const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`
-      vm.isloading = true
-      this.$http.get(url).then((res) => {
-        vm.cartContents = res.data.data
-        vm.loadingItem = ''
-        vm.isloading = false
-      })
+      this.$store.dispatch('getCart')
     },
     addCart (id, qty = 1) {
-      const vm = this
-      const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart/`
-      vm.isloading = true
-      const cart = {
-        product_id: id,
-        qty
-      }
-      this.$http.post(url, { data: cart }).then((res) => {
-        if (res.data.success) {
-          this.$bus.$emit('message:push', '已增加至購物車', 'success')
-          this.$bus.$emit('updateCart')
-        } else {
-          this.$bus.$emit('message:push', '增加至購物車失敗', 'danger')
-        }
-        vm.isloading = false
-      })
+      this.$store.dispatch('addCart', { id, qty })
     },
     removeCartItem (id) {
-      const vm = this
-      const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart/${id}`
-      vm.isloading = true
-      this.$http.delete(url).then((res) => {
-        vm.getCart()
-        vm.isloading = false
-      })
+      this.$store.dispatch('removeCartItem', id)
     },
     getFavorites () {
-      this.favorites = JSON.parse(localStorage.getItem('favorites')) || []
+      this.$store.dispatch('getFavorites')
     },
     // 移除喜歡的商品
     removeFavorItem (product) {
-      const index = this.favorites.indexOf(product)
-      this.favorites.splice(index, 1)
-      // 儲存至 localStorage
-      localStorage.setItem('favorites', JSON.stringify(this.favorites))
-      // 重新整理
-      this.$bus.$emit('productFavor:get')
-      this.getFavorites()
+      this.$store.dispatch('removeFavorItem', product)
+    }
+  },
+  computed: {
+    favorites () {
+      return this.$store.state.favorites
+    },
+    carts () {
+      return this.$store.state.carts
     }
   },
   created () {
     this.getCart()
     this.getFavorites()
-  },
-  mounted () {
-    const vm = this
-    vm.$bus.$on('updateCart', vm.getCart)
-    vm.$bus.$on('favor:get', () => vm.getFavorites())
-  },
-  destroy () {
-    this.$bus.$off('updateCart')
   }
 }
 </script>

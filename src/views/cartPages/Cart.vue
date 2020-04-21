@@ -20,7 +20,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(item) in cartContent.carts" :key="item.id">
+                <tr v-for="(item) in carts.carts" :key="item.id">
                   <td>
                     <button
                       type="button"
@@ -41,11 +41,11 @@
               <tfoot>
                 <tr>
                   <td colspan="3" class="text-right">總計</td>
-                  <td>{{cartContent.total}}</td>
+                  <td>{{carts.total}}</td>
                 </tr>
-                <tr class="text-success" v-if="cartContent.final_total !== cartContent.total">
+                <tr class="text-success" v-if="carts.final_total !== carts.total">
                   <td colspan="3" class="text-right">折扣價</td>
-                  <td>{{cartContent.final_total}}</td>
+                  <td>{{carts.final_total}}</td>
                 </tr>
               </tfoot>
             </table>
@@ -162,7 +162,6 @@ export default {
     return {
       isloading: false,
       loadingItem: '',
-      cartContent: [],
       coupon_code: '',
       form: {
         user: {
@@ -178,24 +177,11 @@ export default {
   methods: {
     // 取得購物車
     getCart () {
-      const vm = this
-      const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart/`
-      vm.isloading = true
-      this.$http.get(url).then((res) => {
-        vm.cartContent = res.data.data
-        vm.loadingItem = ''
-        vm.isloading = false
-      })
+      this.$store.dispatch('getCart')
     },
     // 刪除購物車項目
     removeCartItem (id) {
-      const vm = this
-      const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart/${id}`
-      vm.isloading = true
-      this.$http.delete(url).then((res) => {
-        vm.getCart()
-        vm.isloading = false
-      })
+      this.$store.dispatch('removeCartItem', id)
     },
     addCouponCode () {
       const vm = this
@@ -224,6 +210,11 @@ export default {
           })
         }
       })
+    }
+  },
+  computed: {
+    carts () {
+      return this.$store.state.carts
     }
   },
   created () {
