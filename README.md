@@ -1,7 +1,7 @@
 # 跑跑商城 Kartrider Shop
 
 ## DEMO
-[Kartrider Shop](https://pigeonchen.github.io/KartRider-Shop/#/)
+[Kartrider Shop](https://pigeonchin.github.io/KartRider-Shop/#/)
 
 ## :car: 簡介
 ### 用 Vue cli 4 建置
